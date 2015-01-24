@@ -1,8 +1,29 @@
-var helpers = require("./helpers");
-var AWS = require("aws-sdk");
+(function() 
+{
+	var helpers = require("./helpers");
+	var Queue = require("queuemanager");
+	var SQSCommand = require("./sqscommand");
+	var Worker = require("./worker");
+	
 
-var AWS_CONFIG_FILE = "./config.json";
+	var AWS_CONFIG_FILE = "config.json";
+	var APP_CONFIG_FILE = "./app.json";
+
+	
+	var initConsole = function(AWS) {
+			var appConfig = helpers.readJSONFile(APP_CONFIG_FILE);
+			var queue = new Queue(new AWS.SQS(), appConfig.QueueUrl);
+			var sqsCommand = new SQSCommand(queue);
+			var worker = new Worker(sqsCommand);
+			worker.job();
+			
+	}
+
+	
+	
+	require("./awshelpers").initAWS(initConsole, AWS_CONFIG_FILE);
+		
+	
 
 
-AWS.config.loadFromPath(AWS_CONFIG_FILE);
-
+})()
