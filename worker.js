@@ -4,12 +4,14 @@ var helpers = require("./helpers");
 var simpleDB = require("./simpleDB");
 var Policy = require("./s3post").Policy;
 
-var s3 = new AWS.S3();
+
 
 var POLICY_FILE = "policy.json";
-var Worker = function(sqsCommnad){
+var Worker = function(sqsCommnad, s3Object, simpleData){
 	
 	var queue = sqsCommnad;
+	var s3 = s3Object;
+	var simpleDataAuth = simpleData;
 
 	Worker.prototype.job = function(){
 		var run = schedule.scheduleJob('* * * * *',
@@ -26,7 +28,7 @@ var Worker = function(sqsCommnad){
 					    }
 					    else {
 					        console.log("Success download object from S3");
-					        simpleDB.putUpladedMetadata(key, data);
+					        simpleDB.putUpladedMetadata(key, data,simpleDataAuth);
 					      }
 					    });
 				});

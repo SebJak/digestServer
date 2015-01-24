@@ -14,7 +14,7 @@
 			var appConfig = helpers.readJSONFile(APP_CONFIG_FILE);
 			var queue = new Queue(new AWS.SQS(), appConfig.QueueUrl);
 			var sqsCommand = new SQSCommand(queue);
-			var worker = new Worker(sqsCommand);
+			var worker = new Worker(sqsCommand, new AWS.S3(), new AWS.SimpleDB());
 			worker.job();
 			
 	}

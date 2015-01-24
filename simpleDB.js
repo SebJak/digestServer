@@ -1,11 +1,10 @@
 var AWS = require('aws-sdk');
 var ip = require('ip');
 
-AWS.config.loadFromPath('./config.json');
-var simpledb = new AWS.SimpleDB();
+//var simpledb = new AWS.SimpleDB();
 
 
-var putIpAddress = function(){
+var putIpAddress = function(simpledb){
 	var params = {
 	  Attributes: [ /* required */
 	    {
@@ -27,7 +26,7 @@ var putIpAddress = function(){
 	});
 };
 
-var putUpladedMetadata = function(key, data){
+var putUpladedMetadata = function(key, data,simpledb){
 	var params = {
 	  Attributes: [ /* required */
 	    {
@@ -65,7 +64,7 @@ var putUpladedMetadata = function(key, data){
 	});
 };
 
-var createDomain = function(){
+var createDomain = function(simpledb){
 	var params = {
   		DomainName: 'Jakowski-DB' /* required */
 	};
@@ -75,7 +74,7 @@ var createDomain = function(){
 	});
 };
 
-var getAtributes = function(itemName){
+var getAtributes = function(itemName,simpledb){
 
 	var params = {
 	  DomainName: 'Jakowski-DB', /* required */
@@ -88,6 +87,7 @@ var getAtributes = function(itemName){
 	  else     console.log(data);           // successful response
 	});
 };
+
 
 exports.putIpAddress = putIpAddress;
 exports.createDomain = createDomain;
